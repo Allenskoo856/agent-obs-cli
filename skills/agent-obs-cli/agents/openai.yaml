@@ -1,0 +1,4 @@
+interface:
+  display_name: "Huawei OBS CLI"
+  short_description: "Safely query and transfer Huawei OBS objects"
+  default_prompt: "Use $agent-obs-cli to inspect a configured OBS bucket and list matching objects."

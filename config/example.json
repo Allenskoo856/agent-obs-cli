@@ -1,0 +1,39 @@
+{
+  "profiles": {
+    "prod-account": {
+      "credentials": {
+        "source": "env",
+        "accessKeyIdEnv": "HUAWEI_OBS_PROD_AK",
+        "secretAccessKeyEnv": "HUAWEI_OBS_PROD_SK"
+      },
+      "maxRetries": 3,
+      "timeoutSeconds": 60
+    },
+    "temporary-account": {
+      "credentials": {
+        "source": "env",
+        "accessKeyIdEnv": "HUAWEI_OBS_TEMP_AK",
+        "secretAccessKeyEnv": "HUAWEI_OBS_TEMP_SK",
+        "securityTokenEnv": "HUAWEI_OBS_TEMP_TOKEN"
+      },
+      "maxRetries": 3,
+      "timeoutSeconds": 60
+    }
+  },
+  "buckets": {
+    "prod-assets": {
+      "name": "replace-with-real-bucket-name",
+      "profile": "prod-account",
+      "endpoint": "https://obs.cn-north-4.myhuaweicloud.com"
+    },
+    "temp-reports": {
+      "name": "replace-with-temporary-bucket-name",
+      "profile": "temporary-account",
+      "endpoint": "https://obs.cn-east-3.myhuaweicloud.com"
+    }
+  },
+  "defaults": {
+    "concurrency": 4,
+    "partSizeBytes": 9437184
+  }
+}
