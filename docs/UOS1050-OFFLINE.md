@@ -7,12 +7,13 @@
 
 1. 拉取官方 `debian:10` 容器。
 2. 在 Debian 10 中下载并校验固定版本的 Linux x64 Node.js 运行时。
-3. 在 Debian 10 中执行 `npm ci`、类型检查、Lint、单元测试和构建。
-4. 重新安装 lockfile 锁定的生产依赖。
-5. 将 Node.js、CLI、生产依赖、Agent Skill、示例配置和安装器打包。
-6. 启动第二个 `--network none` 的 Debian 10 容器。
-7. 校验 SHA256、执行系统级离线安装，并运行版本、配置和 Skill 冒烟测试。
-8. 上传保留 30 天的 Actions Artifact。
+3. 先通过 Node.js 22 的类型检查、Lint、单元测试和构建质量门禁。
+4. 在 Debian 10 中重新执行 `npm ci`、类型检查、Lint 和构建。
+5. 重新安装 lockfile 锁定的生产依赖。
+6. 将 Node.js、CLI、生产依赖、Agent Skill、示例配置和安装器打包。
+7. 启动第二个 `--network none` 的 Debian 10 容器。
+8. 校验 SHA256、执行系统级离线安装，并运行版本、配置和 Skill 冒烟测试。
+9. 上传保留 30 天的 Actions Artifact。
 
 目标产物包括：
 

@@ -67,7 +67,6 @@ cd "${root_dir}"
 npm ci
 npm run check
 npm run lint
-npm test
 npm run build
 
 printf 'Installing production-only dependencies for the medium...\n'
