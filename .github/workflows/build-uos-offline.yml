@@ -1,0 +1,67 @@
+name: Build UOS 1050 Offline Media
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uos-offline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-offline-media:
+    name: Build and verify Linux x64 medium
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    env:
+      DEBIAN_IMAGE: debian:10
+      NODE_VERSION: "22.23.1"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Pull Debian 10 build image
+        run: docker pull "${DEBIAN_IMAGE}"
+
+      - name: Build inside Debian 10
+        run: |
+          docker run --rm \
+            --user root \
+            --env NODE_VERSION \
+            --env GITHUB_SHA \
+            --env HOST_UID="$(id -u)" \
+            --env HOST_GID="$(id -g)" \
+            --volume "${GITHUB_WORKSPACE}:/src" \
+            --workdir /src \
+            "${DEBIAN_IMAGE}" \
+            bash scripts/build-uos-offline.sh
+
+      - name: Verify installation with network disabled
+        run: |
+          set -o pipefail
+          docker run --rm \
+            --network none \
+            --user root \
+            --volume "${GITHUB_WORKSPACE}:/src:ro" \
+            --volume "${GITHUB_WORKSPACE}/dist/uos-offline:/media" \
+            "${DEBIAN_IMAGE}" \
+            bash /src/scripts/verify-uos-offline.sh /media \
+            2>&1 | tee dist/uos-offline/OFFLINE_SMOKE_TEST.txt
+
+      - name: List offline artifacts
+        run: |
+          find dist/uos-offline -maxdepth 1 -type f \
+            -printf '%f\t%s bytes\n' | sort
+
+      - name: Upload offline installation medium
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-obs-cli-uos1050-linux-x64-${{ github.sha }}
+          path: dist/uos-offline/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0

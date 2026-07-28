@@ -42,6 +42,27 @@ After the npm package is published:
 npm install -g agent-obs-cli
 ```
 
+### Offline installation on UOS 1050 / Debian 10
+
+Every push to `main` builds a Linux x86_64 offline medium inside Debian 10 and
+installs it in a second Debian 10 container with networking disabled. The
+archive bundles Node.js, production dependencies, the CLI, Agent Skill, example
+configuration, installer, and SHA256 checksums.
+
+Download the artifact from the `Build UOS 1050 Offline Media` Actions workflow,
+transfer the archive and checksum to the isolated network, then run:
+
+```bash
+sha256sum -c agent-obs-cli-*-uos1050-linux-x64.tar.gz.sha256
+tar -xzf agent-obs-cli-*-uos1050-linux-x64.tar.gz
+cd agent-obs-cli-*-uos1050-linux-x64
+sudo ./install.sh --yes
+agent-obs-cli --version
+```
+
+See [`docs/UOS1050-OFFLINE.md`](docs/UOS1050-OFFLINE.md) for the full workflow
+and compatibility boundary.
+
 ## Configuration
 
 The default configuration path is `~/.agent-obs-cli/config.json`. Override it with `AGENT_OBS_CLI_CONFIG` or global `--config <path>`. See [`config/example.json`](config/example.json).

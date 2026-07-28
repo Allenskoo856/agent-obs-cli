@@ -54,6 +54,26 @@ npm install -g agent-obs-cli
 agent-obs-cli --help
 ```
 
+### UOS 1050 / Debian 10 离线安装
+
+每次向 `main` 推送代码后，GitHub Actions 会在 Debian 10 容器中构建
+Linux x86_64 离线介质，并在禁用网络的第二个 Debian 10 容器中完成安装和
+CLI 冒烟测试。介质自带 Node.js、生产依赖、CLI、Agent Skill、示例配置、
+安装脚本和 SHA256 校验文件，目标机不需要预装 Node.js 或访问 npm。
+
+从 Actions 的 `Build UOS 1050 Offline Media` 任务下载 Artifact，转移到
+内网后执行：
+
+```bash
+sha256sum -c agent-obs-cli-*-uos1050-linux-x64.tar.gz.sha256
+tar -xzf agent-obs-cli-*-uos1050-linux-x64.tar.gz
+cd agent-obs-cli-*-uos1050-linux-x64
+sudo ./install.sh --yes
+agent-obs-cli --version
+```
+
+完整说明见 [`docs/UOS1050-OFFLINE.md`](docs/UOS1050-OFFLINE.md)。
+
 ## 配置
 
 默认配置文件：
